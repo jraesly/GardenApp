@@ -1,0 +1,22 @@
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WeatherTwentyOne.Views.LocationTitleWidget"
+             VerticalOptions="FillAndExpand">
+    <Grid
+        HorizontalOptions="Center">
+        <VerticalStackLayout>
+        <Label Text="{Binding LocationTitle}" 
+               FontSize="24"
+               TextColor="Gray"
+               FontAttributes="Bold"
+               Margin="10"
+               HorizontalOptions="StartAndExpand" 
+               VerticalOptions="CenterAndExpand"
+               HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center"/>
+    </VerticalStackLayout>
+    <Grid.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding ChangeLocationCommand}" NumberOfTapsRequired="1"/>
+        </Grid.GestureRecognizers>
+    </Grid>
+</ContentView>

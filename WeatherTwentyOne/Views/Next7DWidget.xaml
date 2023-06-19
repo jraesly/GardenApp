@@ -1,0 +1,99 @@
+﻿<VerticalStackLayout  xmlns:c="clr-namespace:WeatherTwentyOne.Converters"
+              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              xmlns:m="clr-namespace:WeatherTwentyOne.Models"
+              x:Class="WeatherTwentyOne.Views.Next7DWidget">
+    <VerticalStackLayout.Resources>
+        <c:TempSpanConverter x:Key="TempSpanConverter"/>
+        <c:MaxTempOffsetConverter x:Key="MaxTempOffsetConverter"/>
+        <c:StringIsNotEmptyConverter x:Key="StringIsNotEmptyConverter"/>
+        <c:UTCToLocalTimeConverter x:Key="UTCToLocalTimeConverter" />
+        <c:PopPercentageConverter x:Key="PopPercentageConverter" />
+    </VerticalStackLayout.Resources>
+
+    <Label
+        Text="Daily Forecasts"
+        Margin="{OnIdiom Phone='15,0',Default='25,0'}"
+        class="SectionTitle"/>
+
+    <ScrollView Orientation="Horizontal">
+        <HorizontalStackLayout
+            Spacing="12"
+            Padding="{OnIdiom Phone='15,0',Default='25,0'}"
+            BindableLayout.ItemsSource="{Binding WeatherData.daily}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <VerticalStackLayout>
+                        <Label Text="{Binding dt, Converter={StaticResource UTCToLocalTimeConverter}, StringFormat='{0:ddd}'}" 
+                               class="Subhead"
+                               HeightRequest="34" HorizontalOptions="Center"/>
+                        <Label Text="{Binding temp.max, StringFormat='{0:F0}°'}" class="Subhead"
+                               HeightRequest="34" HorizontalOptions="Center"/>
+                        <Image Source="{Binding weather[0].IconUrl}"
+                               WidthRequest="34"
+                               HeightRequest="34"
+                               HorizontalOptions="Center"/>
+                        <!--<BoxView
+                            WidthRequest="1"
+                            HeightRequest="1"
+                            Margin="{Binding temp.min}"
+                            />
+                        <Label
+                            Text="{Binding temp.max, StringFormat='{0:F0}°'}"
+                            class="Subhead" HorizontalOptions="Center" HeightRequest="20"/>
+                        <BoxView
+                            BackgroundColor="{StaticResource Accent_Blue100}"
+                            WidthRequest="10"
+                            CornerRadius="1"
+                            HorizontalOptions="CenterAndExpand">
+                            <BoxView.HeightRequest>
+                                <MultiBinding Converter="{StaticResource TempSpanConverter}">
+                                    <Binding Path="temp.min"/>
+                                    <Binding Path="temp.max" FallbackValue="100"/>
+                                </MultiBinding>
+                            </BoxView.HeightRequest>
+                        </BoxView>
+                        <Label
+                            Text="{Binding temp.min, StringFormat='{0:F0}°'}"
+                            class="Subhead" HorizontalOptions="Center" HeightRequest="20"/>
+                        <BoxView
+                            WidthRequest="1"
+                            HeightRequest="1"
+                            Margin="{Binding temp.min}"
+                            />
+                        <BoxView class="HRule"/>-->
+                        <StackLayout
+                                Orientation="Horizontal"
+                                HeightRequest="40"
+                                HorizontalOptions="Center">
+                            <Image
+                                    x:Name="UmbrellaImage"
+                                    Source="sm_solid_umbrella.png"
+                                    WidthRequest="16"
+                                    HeightRequest="16"
+                                    VerticalOptions="Center"
+                                    IsVisible="False">
+                            <Image.Triggers>
+                                <DataTrigger
+                                        TargetType="Image"
+                                        Binding="{Binding Source={x:Reference PopPercentageLabel}, Path=Text, Converter={StaticResource StringIsNotEmptyConverter}}"
+                                        Value="True">
+                                    <Setter Property="IsVisible" Value="True" TargetName="UmbrellaImage"/>
+                                </DataTrigger>
+                                </Image.Triggers>
+                            </Image>
+                              <Label
+                                    x:Name="PopPercentageLabel"
+                                    Text="{Binding pop, Converter={StaticResource PopPercentageConverter}}"
+                                    class="SubContent" 
+                                    VerticalOptions="Center"/>
+
+                        </StackLayout>
+
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </HorizontalStackLayout>
+    </ScrollView>
+
+</VerticalStackLayout>

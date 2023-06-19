@@ -1,0 +1,61 @@
+﻿<VerticalStackLayout xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:m="clr-namespace:WeatherTwentyOne.Models"
+             x:Class="WeatherTwentyOne.Views.Next24HrWidget"
+             xmlns:converters="clr-namespace:WeatherTwentyOne.Converters"
+>
+    <VerticalStackLayout.Resources>
+        <ResourceDictionary>
+            <converters:UTCToLocalTimeConverter x:Key="UTCToLocalTimeConverter" />
+            <converters:GreaterThanValueConverter x:Key="GreaterThanValueConverter" />
+            <converters:PopPercentageConverter x:Key="PopPercentageConverter"/>
+        </ResourceDictionary>
+    </VerticalStackLayout.Resources>
+    <Label
+        Text="Next 24 Hours"
+        Margin="{OnIdiom Phone='15,0',Default='25,0'}"
+        class="SectionTitle"/>
+
+    <ScrollView
+        Orientation="Horizontal">
+        <HorizontalStackLayout
+            Spacing="12"
+            Padding="{OnIdiom Phone='15,0',Default='25,0'}"
+            BindableLayout.ItemsSource="{Binding WeatherData.hourly}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout>
+                        <Label
+                            Text="{Binding dt,  Converter={StaticResource UTCToLocalTimeConverter}, StringFormat='{0:h tt}'}"
+                            class="Small"
+                            HorizontalOptions="Center"/>
+                        <Image
+                            Source="{Binding weather[0].IconUrl}"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            HorizontalOptions="Center"/>
+                        <Label
+                            Text="{Binding temp, StringFormat='{0:F0}°'}"
+                            class="Subhead"
+                            HorizontalOptions="Center"/>
+                        <!--add another label under temp that appears if hourly.pop is greater than 0-->
+                        <Label
+                        Text="{Binding pop, Converter={StaticResource PopPercentageConverter}}"
+                        IsVisible="True"
+                        FontSize="14"
+                        HorizontalOptions="Center">
+                            <!--<Label.Triggers>
+                                <DataTrigger
+                                    TargetType="Label"
+                                    Binding="{Binding pop, Converter={StaticResource GreaterThanValueConverter}, ConverterParameter=0.001}">
+                                    <Setter Property="IsVisible" Value="True"/>
+                                </DataTrigger>
+                            </Label.Triggers>-->
+                        </Label>
+                    </StackLayout>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </HorizontalStackLayout>
+    </ScrollView>
+
+</VerticalStackLayout>

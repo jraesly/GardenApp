@@ -1,0 +1,76 @@
+﻿<VerticalStackLayout xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Spacing="5"
+             x:Class="WeatherTwentyOne.Views.CurrentWidget"
+             xmlns:c="clr-namespace:WeatherTwentyOne.Converters">
+
+    <VerticalStackLayout.Resources>
+        <c:StringIsNotEmptyConverter x:Key="StringIsNotEmptyConverter"/>
+    </VerticalStackLayout.Resources>
+
+    <StackLayout Spacing="1">
+
+
+        <Border IsVisible="False"
+            BackgroundColor="{StaticResource Primary}"
+            Stroke="Transparent"
+            StrokeThickness="1"
+            HorizontalOptions="Center"
+            Padding="18,4">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="80"/>
+            </Border.StrokeShape>
+            <Label
+            x:Name="WeatherLabel"
+            Text="{Binding WeatherData.current.weather[0].main}"
+            TextColor="{StaticResource White}"
+            HorizontalOptions="Center"
+            FontSize="18"/>
+            <Border.Triggers>
+                <DataTrigger
+                TargetType="Border"
+                Binding="{Binding Source={x:Reference WeatherLabel}, Path=Text, Converter={StaticResource StringIsNotEmptyConverter}}"
+                Value="True">
+                    <Setter Property="IsVisible" Value="True"/>
+                </DataTrigger>
+            </Border.Triggers>
+        </Border>
+        <Image
+        WidthRequest="250"
+        HeightRequest="250"
+        HorizontalOptions="Center"
+        Aspect="AspectFill"
+            
+        Source="{Binding WeatherData.current.weather[0].IconUrl}">
+        <!--<Image.Shadow>
+            <Shadow Brush="#2B0B98" Offset="20,20" Radius="20" Opacity="0.8"/>
+        </Image.Shadow>-->
+            
+    </Image>
+
+    <Label
+        Text="{Binding WeatherData.current.temp, StringFormat='{0:0}℉'}"
+        HorizontalOptions="Center"
+        class="Title1" />
+        <Label
+                Text="{Binding WeatherData.current.feels_like, StringFormat='Feels like: {0:0}℉'}"
+                TextColor="{StaticResource White}"
+                HorizontalOptions="Center"
+                FontSize="14"/>
+        <Label TextColor="{StaticResource White}"
+       HorizontalOptions="Center"
+       FontSize="14">
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="{Binding WeatherData.daily[0].temp.max, StringFormat='Day: {0:0}℉'}" />
+                    <Span Text=" | " />
+                    <Span Text="{Binding WeatherData.daily[0].temp.night, StringFormat='Night: {0:0}℉'}" />
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+
+    </StackLayout>
+
+
+
+</VerticalStackLayout>
